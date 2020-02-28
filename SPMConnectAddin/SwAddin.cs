@@ -16,8 +16,8 @@ namespace SPMConnectAddin
 {
     /// <summary>
     /// Summary description for SPMConnectAddin.
-    /// </summary>
-    [Guid("FCAE26C8-0A46-4B9C-8542-2685EA741DD2"), ComVisible(true)]
+    /// </summary>[Guid("AABF7774-72C8-417B-AFAA-030FA9EF02A4")]
+    [Guid("AABF7774-72C8-417B-AFAA-030FA9EF02A4"), ComVisible(true)]
     [SwAddin(
          Description = "SPMConnect addin for macros",
          Title = "SPMConnect",
@@ -500,7 +500,7 @@ namespace SPMConnectAddin
 
         public void SavetoServer()
         {
-            iSwApp.SendMsgToUser("SavetoServer");
+            connectapi.ExportBOM();
         }
 
         public void OpenModel()
@@ -585,10 +585,7 @@ namespace SPMConnectAddin
 
         public void ExportasStep() => connectapi.ExportModelAsStep();
 
-        public void ExportasDXF()
-        {
-            connectapi.ExportPartAsDxf();
-        }
+        public void ExportasDXF() => connectapi.ExportPartAsDxf();
 
         public void ExportasParasolid() => connectapi.ExportModelAsParasolid();
 
@@ -597,7 +594,6 @@ namespace SPMConnectAddin
         public void SaveIgesToCnc() => connectapi.ExportModelAsIGESToCNC();
 
         public void SaveParaToCnc() => connectapi.ExportModelAsParasolidToCNC();
-
 
         public void DelDangling() => connectapi.DeleteDanglingDimensions();
 
@@ -611,10 +607,7 @@ namespace SPMConnectAddin
 
         public void Savedrawingaspdf() => connectapi.ExportDrawingAsPdf();
 
-        public void Msixfptsketch()
-        {
-            iSwApp.SendMsgToUser("Msixfptsketch");
-        }
+        public void Msixfptsketch() => connectapi.InsertM6FPT();
 
         public void CloseInactive() => connectapi.CloseInactive();
 

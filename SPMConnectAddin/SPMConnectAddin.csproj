@@ -139,7 +139,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>locale.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProgressReport.cs" />
     <Compile Include="SwAddin.cs">
       <SubType>Code</SubType>
     </Compile>

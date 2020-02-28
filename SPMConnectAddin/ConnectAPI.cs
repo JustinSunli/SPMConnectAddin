@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -1917,6 +1918,38 @@ namespace SPMConnectAddin
             }
         }
 
+        public void InsertM6FPT()
+        {
+            try
+            {
+                //make sure we have a part open
+                ModelDoc2 swModel = swApp.ActiveDoc as ModelDoc2;
+                if (swModel == null)
+                {
+                    MessageBox.Show("No active model found", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+
+                if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART)
+                {
+                    // Tell user
+                    MessageBox.Show("Active model is not a part", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                // Create sketch
+                swModel.SketchManager.InsertSketch(true);
+                swModel.SketchManager.MakeSketchBlockFromFile(null, @"\\spm-adfs\CAD Data\AAACAD\A52\A52572-0.SLDBLK", false, 1.0, 0.0);
+                swModel.SetPickMode();
+                swModel.ClearSelection2(true);
+                swModel.ViewZoomtofit2();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Create Cube", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void ReloadSheetformat()
         {
             string sTemplatePath = @"\\spm-adfs\CAD Data\CAD Templates SPM\";
@@ -2093,20 +2126,147 @@ namespace SPMConnectAddin
 
                 return;
             }
-            var location = GetSaveLocation("DXF Flat Pattern|*.dxf", "Save Part as DXF");
-
-            // If the user canceled, return
-            if (string.IsNullOrEmpty(location))
-                return;
-
             PartDoc swPart = (PartDoc)swModel;
-            bool retVal = swPart.ExportFlatPatternView(location, (int)swExportFlatPatternViewOptions_e.swExportFlatPatternOption_RemoveBends);
+            string filepath = Getsharesfolder();
+            if (string.IsNullOrEmpty(filepath))
+            {
+                MessageBox.Show("User shares folder is not configured. Please contact admin", "SPM Connect - Share Folder Path", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            if (retVal == false)
-                swApp.SendMsgToUser("Failed to save flat pattern.");
+            filepath = filepath + @"\SPM_Connect\DXF\";
+            System.IO.Directory.CreateDirectory(filepath);
+            filepath = filepath + swModel.GetTitle().ToString().Substring(0, 6) + ".DXF";
+
+            SelectionMgr swSelMgr = default(SelectionMgr);
+            swSelMgr = (SelectionMgr)swModel.SelectionManager;
+            int count = swSelMgr.GetSelectedObjectCount2(-1);
+
+            if (count == 1) // one face selected
+            {
+                //Check for 2d face
+                int seltype = swSelMgr.GetSelectedObjectType3(1, 0);
+                if (seltype != (int)swSelectType_e.swSelFACES)
+                {
+                    MessageBox.Show("Please select a (one) 2D face before running this command.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                else
+                {
+                    bool isThisAPlane = false;
+                    if (swSelMgr.GetSelectedObjectType3(1, -1) != 2)
+                    {
+                        MessageBox.Show("Item selected is not a face. You must select a (one) complete 2D Face to export.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                    else
+                    {
+                        Face2 WorkFace = default(Face2);
+                        WorkFace = swSelMgr.GetSelectedObject5(1);
+                        Surface WorkSurface = default(Surface);
+                        WorkSurface = WorkFace.IGetSurface();
+                        isThisAPlane = WorkSurface.IsPlane();
+                        if (isThisAPlane == false)
+                        {
+                            MessageBox.Show("Item selected is not a face. You must select a (one) complete 2D Face to export.");
+                            return;
+                        }
+                        else
+                        {
+                            object varAlignment;
+                            double[] dataAlignment = new double[12];
+                            string[] dataViews = new string[2];
+                            dataAlignment[0] = 0.0;
+                            dataAlignment[1] = 0.0;
+                            dataAlignment[2] = 0.0;
+                            dataAlignment[3] = 1.0;
+                            dataAlignment[4] = 0.0;
+                            dataAlignment[5] = 0.0;
+                            dataAlignment[6] = 0.0;
+                            dataAlignment[7] = 1.0;
+                            dataAlignment[8] = 0.0;
+                            dataAlignment[9] = 0.0;
+                            dataAlignment[10] = 0.0;
+                            dataAlignment[11] = 1.0;
+                            varAlignment = dataAlignment;
+                            bool retVal = swPart.ExportToDWG2(filepath, swModel.GetPathName(), (int)swExportToDWG_e.swExportToDWG_ExportSelectedFacesOrLoops, true, varAlignment, false, false, 0, null);
+                            if (retVal == false)
+                                MessageBox.Show("Failed to save flat face as DXF", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            else
+                            {
+                                // Tell user success
+                                DialogResult result = MessageBox.Show("Successfully saved flat face as DXF at " + filepath + System.Environment.NewLine + " Would you like to open the file location?", "SPM Connect", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                if (result == DialogResult.Yes)
+                                {
+                                    string argument = "/select, \"" + filepath + "\"";
+                                    System.Diagnostics.Process.Start("explorer.exe", argument);
+                                }
+                                else
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (count == 0)
+            {
+                object varAlignment;
+                double[] dataAlignment = new double[12];
+                object varViews;
+                string[] dataViews = new string[10];
+
+                dataAlignment[0] = 0.0;
+                dataAlignment[1] = 0.0;
+                dataAlignment[2] = 0.0;
+                dataAlignment[3] = 1.0;
+                dataAlignment[4] = 0.0;
+                dataAlignment[5] = 0.0;
+                dataAlignment[6] = 0.0;
+                dataAlignment[7] = 1.0;
+                dataAlignment[8] = 0.0;
+                dataAlignment[9] = 0.0;
+                dataAlignment[10] = 0.0;
+                dataAlignment[11] = 1.0;
+
+                varAlignment = dataAlignment;
+
+                dataViews[0] = "*Current";
+                dataViews[1] = "*Front";
+                dataViews[2] = "*Top";
+                dataViews[3] = "*Bottom";
+                dataViews[4] = "*Right";
+                dataViews[5] = "*Left";
+                dataViews[6] = "*Back";
+                dataViews[7] = "*Isometric";
+                dataViews[8] = "*Trimetric";
+                dataViews[9] = "*Dimetric";
+                varViews = dataViews;
+                bool retVal = swPart.ExportToDWG2(filepath, swModel.GetPathName(), (int)swExportToDWG_e.swExportToDWG_ExportAnnotationViews, true, varAlignment, false, false, 0, varViews);
+                if (retVal == false)
+                    MessageBox.Show("Failed to save model as DXF", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    // Tell user success
+                    DialogResult result = MessageBox.Show("Successfully saved model as DXF at " + filepath + System.Environment.NewLine + " Would you like to open the file location?", "SPM Connect", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        string argument = "/select, \"" + filepath + "\"";
+                        System.Diagnostics.Process.Start("explorer.exe", argument);
+                    }
+                    else
+                    {
+                    }
+                }
+
+            }
             else
-                // Tell user
-                MessageBox.Show("Successfully saved part as DXF", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            {
+                // multiple faces selected
+                MessageBox.Show("Please select a (one) 2D face before running this command. Or else select zero entities to save the model views as DXF.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
+
         }
 
         /// <summary>
@@ -2443,6 +2603,176 @@ namespace SPMConnectAddin
                 return null;
         }
 
+
+
+        public void TraverseFeatureFeatures(Feature swFeat, long nLevel)
+        {
+            Feature swSubFeat;
+            Feature swSubSubFeat;
+            Feature swSubSubSubFeat;
+            string sPadStr = " ";
+            long i = 0;
+
+            for (i = 0; i <= nLevel; i++)
+            {
+                sPadStr = sPadStr + " ";
+            }
+            while ((swFeat != null))
+            {
+                Debug.Print(sPadStr + swFeat.Name + " [" + swFeat.GetTypeName2() + "]");
+                swSubFeat = (Feature)swFeat.GetFirstSubFeature();
+
+                while ((swSubFeat != null))
+                {
+                    Debug.Print(sPadStr + "  " + swSubFeat.Name + " [" + swSubFeat.GetTypeName() + "]");
+                    swSubSubFeat = (Feature)swSubFeat.GetFirstSubFeature();
+
+                    while ((swSubSubFeat != null))
+                    {
+                        Debug.Print(sPadStr + "    " + swSubSubFeat.Name + " [" + swSubSubFeat.GetTypeName() + "]");
+                        swSubSubSubFeat = (Feature)swSubSubFeat.GetFirstSubFeature();
+
+                        while ((swSubSubSubFeat != null))
+                        {
+                            Debug.Print(sPadStr + "      " + swSubSubSubFeat.Name + " [" + swSubSubSubFeat.GetTypeName() + "]");
+                            swSubSubSubFeat = (Feature)swSubSubSubFeat.GetNextSubFeature();
+
+                        }
+
+                        swSubSubFeat = (Feature)swSubSubFeat.GetNextSubFeature();
+
+                    }
+
+                    swSubFeat = (Feature)swSubFeat.GetNextSubFeature();
+
+                }
+
+                swFeat = (Feature)swFeat.GetNextFeature();
+
+            }
+
+        }
+
+        public void TraverseComponentFeatures(Component2 swComp, long nLevel)
+        {
+            Feature swFeat;
+
+            swFeat = (Feature)swComp.FirstFeature();
+            TraverseFeatureFeatures(swFeat, nLevel);
+        }
+
+        public void TraverseComponent(Component2 swComp, long nLevel)
+        {
+            object[] vChildComp;
+            Component2 swChildComp;
+            string sPadStr = " ";
+            long i = 0;
+
+            for (i = 0; i <= nLevel - 1; i++)
+            {
+                sPadStr = sPadStr + " ";
+            }
+
+            vChildComp = (object[])swComp.GetChildren();
+            List<BOM> bomlist = new List<BOM>();
+            for (i = 0; i < vChildComp.Length; i++)
+            {
+                swChildComp = (Component2)vChildComp[i];
+                if (swChildComp.GetSuppression() != (int)swComponentSuppressionState_e.swComponentSuppressed && !(swChildComp.ExcludeFromBOM))
+                {
+
+                    int bomPos = FindBomPosition(bomlist, swChildComp);
+                    if (bomPos == -1)
+                    {
+                        BOM bOM = new BOM
+                        {
+                            path = swChildComp.GetPathName(),
+                            s_id = bomlist.Count + 1,
+                            itemno = swChildComp.Name,
+                            description = swChildComp.Name2,
+                            qty = 1
+                        };
+                        bomlist.Add(bOM);
+
+                    }
+                    else
+                    {
+                        BOM dog = bomlist.FirstOrDefault(d => d.path.ToLower() == swChildComp.GetPathName().ToLower());
+                        if (dog.path != null) { dog.qty++; }
+
+                    }
+
+                    Debug.Print(sPadStr + "+" + swChildComp.Name2 + " <" + swChildComp.ReferencedConfiguration + ">");
+
+                }
+
+                //TraverseComponentFeatures(swChildComp, nLevel);
+                //TraverseComponent(swChildComp, nLevel + 1);
+            }
+            foreach (BOM bom in bomlist)
+            {
+                Debug.Print(bom.s_id + "+" + bom.itemno + " <" + bom.description + "> " + bom.qty);
+            }
+        }
+
+        private int FindBomPosition(List<BOM> bom, Component2 comp)
+        {
+
+            foreach (BOM item in bom)
+            {
+                if ((item.path).ToLower() == comp.GetPathName().ToLower())
+                {
+                    return 0;
+                }
+            }
+            return -1;
+        }
+
+        public void TraverseModelFeatures(ModelDoc2 swModel, long nLevel)
+        {
+            Feature swFeat;
+
+            swFeat = (Feature)swModel.FirstFeature();
+            TraverseFeatureFeatures(swFeat, nLevel);
+        }
+        public void ExportBOM()
+        {
+
+            ModelDoc2 swModel;
+            ConfigurationManager swConfMgr;
+            Configuration swConf;
+            Component2 swRootComp;
+
+            swModel = (ModelDoc2)swApp.ActiveDoc;
+            swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
+            swConf = (Configuration)swConfMgr.ActiveConfiguration;
+            swRootComp = (Component2)swConf.GetRootComponent();
+
+            System.Diagnostics.Stopwatch myStopwatch = new Stopwatch();
+            myStopwatch.Start();
+
+            Debug.Print("File = " + swModel.GetPathName());
+
+            //TraverseModelFeatures(swModel, 1);
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                TraverseComponent(swRootComp, 1);
+            }
+
+            myStopwatch.Stop();
+            TimeSpan myTimespan = myStopwatch.Elapsed;
+            Debug.Print("Time = " + myTimespan.TotalSeconds + " sec");
+
+        }
+
+
         #endregion Private Helpers
     }
+}
+class BOM
+{
+    public int s_id;
+    public int qty;
+    public string itemno, description, path;
 }
