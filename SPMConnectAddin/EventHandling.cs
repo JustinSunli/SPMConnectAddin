@@ -11,13 +11,15 @@ namespace SPMConnectAddin
         protected ISldWorks iSwApp;
         protected ModelDoc2 document;
         protected SwAddin userAddin;
+        protected ConnectAPI connectAPI;
 
         protected Hashtable openModelViews;
 
-        public DocumentEventHandler(ModelDoc2 modDoc, SwAddin addin)
+        public DocumentEventHandler(ModelDoc2 modDoc, SwAddin addin, ConnectAPI connect)
         {
             document = modDoc;
             userAddin = addin;
+            connectAPI = connect;
             iSwApp = (ISldWorks)userAddin.SwApp;
             openModelViews = new Hashtable();
         }
@@ -95,8 +97,8 @@ namespace SPMConnectAddin
     {
         PartDoc doc;
 
-        public PartEventHandler(ModelDoc2 modDoc, SwAddin addin)
-            : base(modDoc, addin)
+        public PartEventHandler(ModelDoc2 modDoc, SwAddin addin, ConnectAPI connect)
+            : base(modDoc, addin, connect)
         {
             doc = (PartDoc)document;
         }
@@ -105,7 +107,7 @@ namespace SPMConnectAddin
         {
             doc.DestroyNotify += new DPartDocEvents_DestroyNotifyEventHandler(OnDestroy);
             doc.NewSelectionNotify += new DPartDocEvents_NewSelectionNotifyEventHandler(OnNewSelection);
-
+            doc.FileSaveNotify += new DPartDocEvents_FileSaveNotifyEventHandler(OnFileSave);
             ConnectModelViews();
 
             return true;
@@ -115,7 +117,7 @@ namespace SPMConnectAddin
         {
             doc.DestroyNotify -= new DPartDocEvents_DestroyNotifyEventHandler(OnDestroy);
             doc.NewSelectionNotify -= new DPartDocEvents_NewSelectionNotifyEventHandler(OnNewSelection);
-
+            doc.FileSaveNotify += new DPartDocEvents_FileSaveNotifyEventHandler(OnFileSave);
             DisconnectModelViews();
 
             userAddin.DetachModelEventHandler(document);
@@ -127,6 +129,14 @@ namespace SPMConnectAddin
         {
             DetachEventHandlers();
             return 0;
+        }
+
+
+        public int OnFileSave(string FileName)
+        {
+            connectAPI.SaveToServer(false);
+            return 0;
+
         }
 
         public int OnNewSelection()
@@ -140,8 +150,8 @@ namespace SPMConnectAddin
         AssemblyDoc doc;
         SwAddin swAddin;
 
-        public AssemblyEventHandler(ModelDoc2 modDoc, SwAddin addin)
-            : base(modDoc, addin)
+        public AssemblyEventHandler(ModelDoc2 modDoc, SwAddin addin, ConnectAPI connect)
+            : base(modDoc, addin, connect)
         {
             doc = (AssemblyDoc)document;
             swAddin = addin;
@@ -155,6 +165,7 @@ namespace SPMConnectAddin
             doc.ComponentStateChangeNotify += new DAssemblyDocEvents_ComponentStateChangeNotifyEventHandler(ComponentStateChangeNotify);
             doc.ComponentVisualPropertiesChangeNotify += new DAssemblyDocEvents_ComponentVisualPropertiesChangeNotifyEventHandler(ComponentVisualPropertiesChangeNotify);
             doc.ComponentDisplayStateChangeNotify += new DAssemblyDocEvents_ComponentDisplayStateChangeNotifyEventHandler(ComponentDisplayStateChangeNotify);
+            doc.FileSaveNotify += new DAssemblyDocEvents_FileSaveNotifyEventHandler(OnFileSave);
             ConnectModelViews();
 
             return true;
@@ -168,6 +179,7 @@ namespace SPMConnectAddin
             doc.ComponentStateChangeNotify -= new DAssemblyDocEvents_ComponentStateChangeNotifyEventHandler(ComponentStateChangeNotify);
             doc.ComponentVisualPropertiesChangeNotify -= new DAssemblyDocEvents_ComponentVisualPropertiesChangeNotifyEventHandler(ComponentVisualPropertiesChangeNotify);
             doc.ComponentDisplayStateChangeNotify -= new DAssemblyDocEvents_ComponentDisplayStateChangeNotifyEventHandler(ComponentDisplayStateChangeNotify);
+            doc.FileSaveNotify += new DAssemblyDocEvents_FileSaveNotifyEventHandler(OnFileSave);
             DisconnectModelViews();
 
             userAddin.DetachModelEventHandler(document);
@@ -179,6 +191,13 @@ namespace SPMConnectAddin
         {
             DetachEventHandlers();
             return 0;
+        }
+
+        public int OnFileSave(string FileName)
+        {
+            connectAPI.SaveToServer(false);
+            return 0;
+
         }
 
         public int OnNewSelection()
@@ -260,8 +279,8 @@ namespace SPMConnectAddin
     {
         DrawingDoc doc;
 
-        public DrawingEventHandler(ModelDoc2 modDoc, SwAddin addin)
-            : base(modDoc, addin)
+        public DrawingEventHandler(ModelDoc2 modDoc, SwAddin addin, ConnectAPI connect)
+            : base(modDoc, addin, connect)
         {
             doc = (DrawingDoc)document;
         }
@@ -319,6 +338,7 @@ namespace SPMConnectAddin
         {
             mView.DestroyNotify2 += new DModelViewEvents_DestroyNotify2EventHandler(OnDestroy);
             mView.RepaintNotify += new DModelViewEvents_RepaintNotifyEventHandler(OnRepaint);
+
             return true;
         }
 

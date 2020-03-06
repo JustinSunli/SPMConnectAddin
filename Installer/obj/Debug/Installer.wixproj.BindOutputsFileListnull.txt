@@ -1,0 +1,2 @@
+D:\GitHub\SPMConnectAddin\Installer\bin\Debug\SPMConnect Addin.msi
+D:\GitHub\SPMConnectAddin\Installer\bin\Debug\SPMConnect Addin.wixpdb

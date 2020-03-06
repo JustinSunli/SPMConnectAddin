@@ -48,7 +48,7 @@
     <NoWarn>
     </NoWarn>
     <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
+    <RegisterForComInterop>true</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
@@ -81,8 +81,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bunifu_UI_v1.5.3">
+    <Reference Include="Bunifu_UI_v1.5.3, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>C:\Users\spatel.SPM\Downloads\Bunifu_UI_v1.5.3\Bunifu_UI_v1.5.3.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -120,7 +122,15 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BOM.cs" />
     <Compile Include="ConnectAPI.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SPMItem.cs" />
     <Compile Include="OpenItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +152,10 @@
     <Compile Include="SwAddin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UpdateChecker.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="locale.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>locale.Designer.cs</LastGenOutput>
@@ -151,46 +165,46 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="buttonicons\icon128.png">
+    <Content Include="icon128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icon20.png">
+    <Content Include="icon20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icon32.png">
+    <Content Include="icon32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icon40.png">
+    <Content Include="icon40.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icon64.png">
+    <Content Include="icon64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icon96.png">
+    <Content Include="icon96.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main128.png">
+    <Content Include="main128.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main20.png">
+    <Content Include="main20.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main32.png">
+    <Content Include="main32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main40.png">
+    <Content Include="main40.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main64.png">
+    <Content Include="main64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\main96.png">
+    <Content Include="main96.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icons_16.png">
+    <Content Include="icons_16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="buttonicons\icons_24.png">
+    <Content Include="icons_24.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\SolidWorks_64.png" />
@@ -221,15 +235,15 @@ IF "$(PlatformName)" == "x64" GOTO X64
 GOTO END
 
 :ANYCPU
-IF EXIST "%Windir%\Microsoft.NET\Framework64\%FMWK%\regasm.exe" "%Windir%\Microsoft.NET\Framework64\%FMWK%\regasm" /codebase "$(TargetPath)"
+IF EXIST "%25Windir%25\Microsoft.NET\Framework64\%25FMWK%25\regasm.exe" "%25Windir%25\Microsoft.NET\Framework64\%25FMWK%25\regasm" /codebase "$(TargetPath)"
 GOTO END
 
 :X64
-IF EXIST "%Windir%\Microsoft.NET\Framework64\%FMWK%\regasm.exe" "%Windir%\Microsoft.NET\Framework64\%FMWK%\regasm" /codebase "$(TargetPath)"
+IF EXIST "%25Windir%25\Microsoft.NET\Framework64\%25FMWK%25\regasm.exe" "%25Windir%25\Microsoft.NET\Framework64\%25FMWK%25\regasm" /codebase "$(TargetPath)"
 GOTO END
 
 :END
-    
-    </PostBuildEvent>
+"%25WIX%25\bin\heat.exe" file "$(TargetPath)" -ag -srd -cg "AddInComRegGroup" -var var.SourceOutDir -dr INSTALLFOLDER -o "..\$(Configuration)\AddInReg.wxs"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

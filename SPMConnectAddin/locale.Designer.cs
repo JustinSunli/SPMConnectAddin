@@ -8,10 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SPMConnectAddin {
+namespace SPMConnectAddin
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,140 +23,170 @@ namespace SPMConnectAddin {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class locale {
-        
+    internal class locale
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal locale() {
+        internal locale()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        internal static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SPMConnectAddin.locale", typeof(locale).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
-            get {
+        internal static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
-        internal static string About {
-            get {
+        internal static string About
+        {
+            get
+            {
                 return ResourceManager.GetString("About", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Circle sketch.
         /// </summary>
-        internal static string CircleSketch {
-            get {
+        internal static string CircleSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("CircleSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Circle with revolve axis.
         /// </summary>
-        internal static string CircleWithRevolveAxisSketch {
-            get {
+        internal static string CircleWithRevolveAxisSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("CircleWithRevolveAxisSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Hexagon Sketch.
         /// </summary>
-        internal static string HexagonSketch {
-            get {
+        internal static string HexagonSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("HexagonSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to L-profile sketch.
         /// </summary>
-        internal static string LProfileSketch {
-            get {
+        internal static string LProfileSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("LProfileSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rectangle sketch.
         /// </summary>
-        internal static string RectangleSketch {
-            get {
+        internal static string RectangleSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("RectangleSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rectangle with revolve axis.
         /// </summary>
-        internal static string RectangleWithRevolveAxisSketch {
-            get {
+        internal static string RectangleWithRevolveAxisSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("RectangleWithRevolveAxisSketch", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SolidWorks_64 {
-            get {
+        internal static System.Drawing.Bitmap SolidWorks_64
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("SolidWorks_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to T-profile sketch (closed).
         /// </summary>
-        internal static string TProfileSketchClosed {
-            get {
+        internal static string TProfileSketchClosed
+        {
+            get
+            {
                 return ResourceManager.GetString("TProfileSketchClosed", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Check for updates.
         /// </summary>
-        internal static string UpdateCheck {
-            get {
+        internal static string UpdateCheck
+        {
+            get
+            {
                 return ResourceManager.GetString("UpdateCheck", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to U-profile sketch.
         /// </summary>
-        internal static string UProfileSketch {
-            get {
+        internal static string UProfileSketch
+        {
+            get
+            {
                 return ResourceManager.GetString("UProfileSketch", resourceCulture);
             }
         }

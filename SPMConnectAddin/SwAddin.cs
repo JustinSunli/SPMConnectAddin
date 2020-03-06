@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SPMConnectAddin
@@ -17,7 +18,7 @@ namespace SPMConnectAddin
     /// <summary>
     /// Summary description for SPMConnectAddin.
     /// </summary>[Guid("AABF7774-72C8-417B-AFAA-030FA9EF02A4")]
-    [Guid("AABF7774-72C8-417B-AFAA-030FA9EF02A4"), ComVisible(true)]
+    [Guid("666CAF40-D1A8-42C5-AD90-ADE271FFC4BC"), ComVisible(true)]
     [SwAddin(
          Description = "SPMConnect addin for macros",
          Title = "SPMConnect",
@@ -205,7 +206,7 @@ namespace SPMConnectAddin
             if (iBmp == null)
                 iBmp = new BitmapHandler();
             Assembly thisAssembly;
-            int[] cmdIndex = new int[22];
+            int[] cmdIndex = new int[26];
             string Title = "SPM Connect", ToolTip = "SPM Connect Addin";
 
             int[] docTypes = new int[]{(int)swDocumentTypes_e.swDocASSEMBLY,
@@ -221,7 +222,7 @@ namespace SPMConnectAddin
             //get the ID information stored in the registry
             bool getDataResult = iCmdMgr.GetGroupDataFromRegistry(mainCmdGroupID, out registryIDs);
 
-            int[] knownIDs = new int[22] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
+            int[] knownIDs = new int[26] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };
 
             if (getDataResult)
             {
@@ -240,53 +241,57 @@ namespace SPMConnectAddin
 
             cmdGroup = iCmdMgr.CreateCommandGroup2(mainCmdGroupID, Title, ToolTip, "", -1, ignorePrevious, ref cmdGroupErr);
 
-            icons[0] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon20.png");
-            icons[1] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon32.png");
-            icons[2] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon40.png");
-            icons[3] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon64.png");
-            icons[4] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon96.png");
-            icons[5] = Path.Combine(GetAssemblyLocation(), @"buttonicons\icon128.png");
+            icons[0] = Path.Combine(GetAssemblyLocation(), @"icon20.png");
+            icons[1] = Path.Combine(GetAssemblyLocation(), @"icon32.png");
+            icons[2] = Path.Combine(GetAssemblyLocation(), @"icon40.png");
+            icons[3] = Path.Combine(GetAssemblyLocation(), @"icon64.png");
+            icons[4] = Path.Combine(GetAssemblyLocation(), @"icon96.png");
+            icons[5] = Path.Combine(GetAssemblyLocation(), @"icon128.png");
 
-            mainIcons[0] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main20.png");
-            mainIcons[1] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main32.png");
-            mainIcons[2] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main40.png");
-            mainIcons[3] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main64.png");
-            mainIcons[4] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main96.png");
-            mainIcons[5] = Path.Combine(GetAssemblyLocation(), @"buttonicons\main128.png");
+            mainIcons[0] = Path.Combine(GetAssemblyLocation(), @"main20.png");
+            mainIcons[1] = Path.Combine(GetAssemblyLocation(), @"main32.png");
+            mainIcons[2] = Path.Combine(GetAssemblyLocation(), @"main40.png");
+            mainIcons[3] = Path.Combine(GetAssemblyLocation(), @"main64.png");
+            mainIcons[4] = Path.Combine(GetAssemblyLocation(), @"main96.png");
+            mainIcons[5] = Path.Combine(GetAssemblyLocation(), @"main128.png");
 
             cmdGroup.IconList = icons;
             cmdGroup.MainIconList = mainIcons;
 
             int menuToolbarOption = (int)(swCommandItemType_e.swMenuItem | swCommandItemType_e.swToolbarItem);
-            cmdIndex[0] = cmdGroup.AddCommandItem2("Save to Server", -1, "Save current model to spmconnect", "Save to Server", 20, "SavetoServer", "", 0, menuToolbarOption);
+            cmdIndex[0] = cmdGroup.AddCommandItem2("Save to Server", -1, "Save current model to spmconnect", "Save to Server", 20, "SavetoServer", "NeedEnabledPA", 0, menuToolbarOption);
             cmdIndex[1] = cmdGroup.AddCommandItem2("Open Model", -1, "Open Solidworks model", "Open Model", 11, "OpenModel", "", 1, menuToolbarOption);
             cmdIndex[2] = cmdGroup.AddCommandItem2("Open Read Only", -1, "Open Solidworks model in read only mode", "Open Read Only", 9, "OpenReadOnly", "", 2, menuToolbarOption);
-            cmdIndex[3] = cmdGroup.AddCommandItem2("Copy Model", -1, "Save as copy of current model", "Copy Model", 2, "SaveasCopy", "", 3, menuToolbarOption);
-            cmdIndex[4] = cmdGroup.AddCommandItem2("Export Parasolid", -1, "Export current model as parasolid", "Export Parasolid", 4, "ExportasParasolid", "", 4, menuToolbarOption);
-            cmdIndex[5] = cmdGroup.AddCommandItem2("Export STEP", -1, "Export current model as STEP", "Export STEP", 5, "ExportasStep", "", 5, menuToolbarOption);
-            cmdIndex[6] = cmdGroup.AddCommandItem2("Export IGES", -1, "Export current model as IGES", "Export IGES", 6, "ExportasIges", "", 6, menuToolbarOption);
-            cmdIndex[7] = cmdGroup.AddCommandItem2("Export Dxf", -1, "Export current model as DXF", "Export Dxf", 8, "ExportasDXF", "", 7, menuToolbarOption);
-            cmdIndex[8] = cmdGroup.AddCommandItem2("Export IGES CNC", -1, "Export current model to CNC folder as IGES", "Export IGES CNC", 12, "SaveIgesToCnc", "", 8, menuToolbarOption);
-            cmdIndex[9] = cmdGroup.AddCommandItem2("Delete Dangling", -1, "Delete dangling dimensions in drawing", "Delete Dangling", 7, "DelDangling", "", 9, menuToolbarOption);
-            cmdIndex[10] = cmdGroup.AddCommandItem2("Reload Sheet Format", -1, "Reload current sheet format", "Reload Sheet Format", 14, "ReloadSheetformat", "", 10, menuToolbarOption);
-            cmdIndex[11] = cmdGroup.AddCommandItem2("Dynamic Higlight", -1, "Turn on or off dynamic highlight", "Dynamic Highlight", 18, "DynamicHighlight", "", 11, menuToolbarOption);
-            cmdIndex[12] = cmdGroup.AddCommandItem2("Export PDF", -1, "Export drawing as pdf", "Export PDF", 17, "Savedrawingaspdf", "", 12, menuToolbarOption);
-            cmdIndex[13] = cmdGroup.AddCommandItem2("M6 FPT Sketch Block", -1, "Insert M6 FPT sketch block", "M6 FPT Sketch Block", 0, "Msixfptsketch", "", 13, menuToolbarOption);
-            cmdIndex[14] = cmdGroup.AddCommandItem2("Close Inactive", -1, "Close all inactive documents in background", "Close Inactive", 1, "CloseInactive", "", 14, menuToolbarOption);
-            cmdIndex[15] = cmdGroup.AddCommandItem2("Random Color", -1, "Assign random color to part", "Random Color", 16, "Randomcolor", "", 15, menuToolbarOption);
-            cmdIndex[16] = cmdGroup.AddCommandItem2("Print Drawings", -1, "Print all drawings for assembly", "Print Drawings", 13, "Printall", "", 16, menuToolbarOption);
-            cmdIndex[17] = cmdGroup.AddCommandItem2("Export Parasolid CNC", -1, "Export current model to CNC folder as Parasolid", "Export Parasolid CNC", 19, "SaveParaToCnc", "", 17, menuToolbarOption);
-            cmdIndex[18] = cmdGroup.AddCommandItem2("Create Cube", -1, "Create a cube to start in a new part", "Create Cube", 21, "CreateCube", "", 18, menuToolbarOption);
-            cmdIndex[19] = cmdGroup.AddCommandItem2("SPM Connect", -1, "Show SPM Connect application", "SPM Connect", 22, "SPMConnect", "", 19, menuToolbarOption);
+            cmdIndex[3] = cmdGroup.AddCommandItem2("Copy Model", -1, "Save as copy of current model", "Copy Model", 2, "SaveasCopy", "NeedEnabledPA", 3, menuToolbarOption);
+            cmdIndex[4] = cmdGroup.AddCommandItem2("Export Parasolid", -1, "Export current model as parasolid", "Export Parasolid", 4, "ExportasParasolid", "NeedEnabledPA", 4, menuToolbarOption);
+            cmdIndex[5] = cmdGroup.AddCommandItem2("Export STEP", -1, "Export current model as STEP", "Export STEP", 5, "ExportasStep", "NeedEnabledPA", 5, menuToolbarOption);
+            cmdIndex[6] = cmdGroup.AddCommandItem2("Export IGES", -1, "Export current model as IGES", "Export IGES", 6, "ExportasIges", "NeedEnabledPA", 6, menuToolbarOption);
+            cmdIndex[7] = cmdGroup.AddCommandItem2("Export Dxf", -1, "Export current model as DXF", "Export Dxf", 8, "ExportasDXF", "NeedEnabledP", 7, menuToolbarOption);
+            cmdIndex[8] = cmdGroup.AddCommandItem2("Export IGES CNC", -1, "Export current model to CNC folder as IGES", "Export IGES CNC", 12, "SaveIgesToCnc", "NeedEnabledPA", 8, menuToolbarOption);
+            cmdIndex[9] = cmdGroup.AddCommandItem2("Delete Dangling", -1, "Delete dangling dimensions in drawing", "Delete Dangling", 7, "DelDangling", "NeedEnabledD", 9, menuToolbarOption);
+            cmdIndex[10] = cmdGroup.AddCommandItem2("Reload Sheet Format", -1, "Reload current sheet format", "Reload Sheet Format", 14, "ReloadSheetformat", "NeedEnabledD", 10, menuToolbarOption);
+            cmdIndex[11] = cmdGroup.AddCommandItem2("Dynamic Higlight", -1, "Turn on or off dynamic highlight", "Dynamic Highlight", 18, "DynamicHighlight", "NeedEnabledD", 11, menuToolbarOption);
+            cmdIndex[12] = cmdGroup.AddCommandItem2("Export PDF", -1, "Export drawing as pdf", "Export PDF", 17, "Savedrawingaspdf", "NeedEnabledD", 12, menuToolbarOption);
+            cmdIndex[13] = cmdGroup.AddCommandItem2("M6 FPT Sketch Block", -1, "Insert M6 FPT sketch block", "M6 FPT Sketch Block", 0, "Msixfptsketch", "NeedEnabledP", 13, menuToolbarOption);
+            cmdIndex[14] = cmdGroup.AddCommandItem2("Close Inactive", -1, "Close all inactive documents in background", "Close Inactive", 1, "CloseInactive", "NeedEnabledPAD", 14, menuToolbarOption);
+            cmdIndex[15] = cmdGroup.AddCommandItem2("Random Color", -1, "Assign random color to part", "Random Color", 16, "Randomcolor", "NeedEnabledP", 15, menuToolbarOption);
+            cmdIndex[16] = cmdGroup.AddCommandItem2("Print Drawings", -1, "Print all drawings for assembly", "Print Drawings", 13, "Printall", "NeedEnabledPA", 16, menuToolbarOption);
+            cmdIndex[17] = cmdGroup.AddCommandItem2("Export Parasolid CNC", -1, "Export current model to CNC folder as Parasolid", "Export Parasolid CNC", 19, "SaveParaToCnc", "NeedEnabledPA", 17, menuToolbarOption);
+            cmdIndex[18] = cmdGroup.AddCommandItem2("Create Cube", -1, "Create a cube to start in a new part", "Create Cube", 21, "CreateCube", "NeedEnabledPA", 18, menuToolbarOption);
+            cmdIndex[19] = cmdGroup.AddCommandItem2("SPM Connect", -1, "Show SPM Connect application", "SPM Connect", 22, "SPMConnect", "NeedEnabledPA", 19, menuToolbarOption);
             cmdIndex[20] = cmdGroup.AddCommandItem2("Add to Favorites", -1, "Add current item to favorites", "Add to Favorites", 23, "AddtoFav", "CheckNotFav", 20, menuToolbarOption);
             cmdIndex[21] = cmdGroup.AddCommandItem2("Remove from Favorites", -1, "Remove current item from favorites", "Remove from Favorites", 24, "RemoveFav", "CheckAllReadyFav", 21, menuToolbarOption);
+            cmdIndex[22] = cmdGroup.AddCommandItem2("Mark Drawing Checked", -1, "Mark active part/assy drawings checked", "Mark Checked", 25, "MarkChecked", "CheckDrawingEnable", 22, menuToolbarOption);
+            cmdIndex[23] = cmdGroup.AddCommandItem2("Mark Drawing Approved", -1, "Mark active part/assy drawings approved", "Mark Approved", 26, "MarkApproved", "ApproveDrawingEnable", 23, menuToolbarOption);
+            cmdIndex[24] = cmdGroup.AddCommandItem2("Get My Next Item No", -1, "Get your next item no on your clipboard", "Next ItemNo", 27, "NextPartNo", "NeedEnabledPA", 24, menuToolbarOption);
+            cmdIndex[25] = cmdGroup.AddCommandItem2("Check for updates", -1, "Check for new update on SPM Connect AddIn", "Check for updates", 28, "UpdateCheck", "NeedEnabledPA", 25, menuToolbarOption);
 
             cmdGroup.HasToolbar = true;
             cmdGroup.HasMenu = true;
             cmdGroup.Activate();
 
             FlyoutGroup flyGroup = iCmdMgr.CreateFlyoutGroup(flyoutGroupID, "Rapid Sketch", "Rapid Sketch", "Create Rapid Sketches",
-          mainIcons[0], mainIcons[2], Path.Combine(GetAssemblyLocation(), @"buttonicons\icons_16.png"), Path.Combine(GetAssemblyLocation(), @"buttonicons\icons_24.png"), "FlyoutCallback", "FlyoutEnable");
+          mainIcons[0], mainIcons[2], Path.Combine(GetAssemblyLocation(), @"icons_16.png"), Path.Combine(GetAssemblyLocation(), @"icons_24.png"), "FlyoutCallback", "FlyoutEnable");
 
             string t;
             t = locale.LProfileSketch;
@@ -406,8 +411,8 @@ namespace SPMConnectAddin
 
                     // Group 4
                     CommandTabBox cmdBox4 = cmdTab.AddCommandTabBox();
-                    int[] cmdIDs4 = new int[4];
-                    int[] TextType4 = new int[4];
+                    int[] cmdIDs4 = new int[8];
+                    int[] TextType4 = new int[8];
 
                     if (type == 1 || type == 2)
                     {
@@ -422,6 +427,14 @@ namespace SPMConnectAddin
                         TextType4[2] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
                         cmdIDs4[3] = cmdGroup.get_CommandID(cmdIndex[21]);
                         TextType4[3] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
+                        cmdIDs4[4] = cmdGroup.get_CommandID(cmdIndex[22]);
+                        TextType4[4] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
+                        cmdIDs4[5] = cmdGroup.get_CommandID(cmdIndex[23]);
+                        TextType4[5] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
+                        cmdIDs4[6] = cmdGroup.get_CommandID(cmdIndex[24]);
+                        TextType4[6] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
+                        cmdIDs4[7] = cmdGroup.get_CommandID(cmdIndex[25]);
+                        TextType4[7] = (int)swCommandTabButtonTextDisplay_e.swCommandTabButton_TextBelow;
                     }
 
                     // Add the commands
@@ -500,7 +513,7 @@ namespace SPMConnectAddin
 
         public void SavetoServer()
         {
-            connectapi.ExportBOM();
+            connectapi.SaveToServer(true);
         }
 
         public void OpenModel()
@@ -613,9 +626,25 @@ namespace SPMConnectAddin
 
         public void Randomcolor() => connectapi.Randomcolor();
 
+        private Form1 progressBarForm = new Form1();
+
+        public void UpdateCheck()
+        {
+            SPMConnectAddin.UpdateChecker.start(@"\\spm-adfs\SDBASE\SPM Connect Addin\update.xml", "SPM Connect AddIn", "spm", false);
+        }
+
         public void Printall()
         {
-            iSwApp.SendMsgToUser("Coming soon!");
+            //iSwApp.SendMsgToUser("Coming soon!")
+            Task task = new Task(PrintDrawings);
+            task.Start();
+            progressBarForm.ShowDialog();
+            progressBarForm.UpdateProgressBar(1, "Fetching components");
+        }
+
+        private void PrintDrawings()
+        {
+            connectapi.PrintDrawings(progressBarForm);
         }
 
         [DllImport("USER32.DLL")]
@@ -649,8 +678,22 @@ namespace SPMConnectAddin
 
         public int CheckNotFav()
         {
-            bool result = connectapi.CheckitempresentonFavorites("");
-            return result ? 0 : 1;
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+            {
+                return 0;
+            }
+            else if (String.IsNullOrEmpty(swModel.GetPathName()))
+            {
+                return 0;
+            }
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                bool result = connectapi.CheckitempresentonFavorites("");
+
+                return result ? 0 : 1;
+            }
+            return 0;
         }
 
         public void RemoveFav()
@@ -660,74 +703,159 @@ namespace SPMConnectAddin
 
         public int CheckAllReadyFav()
         {
-            bool result = connectapi.CheckitempresentonFavorites("");
-            return result ? 1 : 0;
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+            {
+                return 0;
+            }
+            else if (String.IsNullOrEmpty(swModel.GetPathName()))
+            {
+                return 0;
+            }
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                bool result = connectapi.CheckitempresentonFavorites("");
+                return result ? 1 : 0;
+            }
+            return 0;
         }
 
-        public int NeedEnabled(bool part, bool assy, bool draw)
+        public int NeedEnabledPA()
         {
             ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+                return 0;
 
-            if (part && !assy && !draw) // part only
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
             {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+                return 1;
+            }
+            return 0;
+        }
+
+        public int NeedEnabledPAD()
+        {
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+                return 0;
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART || swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        public int NeedEnabledD()
+        {
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+                return 0;
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        public int NeedEnabledP()
+        {
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+                return 0;
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        public int CheckDrawingEnable()
+        {
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+            {
+                return 0;
+            }
+            else if (String.IsNullOrEmpty(swModel.GetPathName()))
+            {
+                return 0;
+            }
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                if (connectapi.CheckingDrawingRights())
                 {
                     return 1;
                 }
-                return 0;
-            }
-            else if (!part && assy && !draw) // assy only
-            {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+                else
                 {
-                    return 1;
+                    return 0;
                 }
+
+                // TODO: do learning on the drawing approval table to see the drawing has been marked checked or not
+            }
+            return 0;
+        }
+
+        public int ApproveDrawingEnable()
+        {
+            ModelDoc2 swModel = iSwApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+            {
                 return 0;
             }
-            else if (!part && !assy && draw) // draw only
+            else if (String.IsNullOrEmpty(swModel.GetPathName()))
             {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
+                return 0;
+            }
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                if (connectapi.ApproveDrawingRights())
                 {
-                    return 1;
+                    bool result = connectapi.CheckMarkedDrawingExists("");
+                    return result ? 1 : 0;
                 }
-                return 0;
-            }
-            else if (part && assy && !draw) // part and assy
-            {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART || swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+                else
                 {
-                    return 1;
+                    return 0;
                 }
-                return 0;
             }
-            else if (part && !assy && draw) // part and drawing
-            {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART || swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
-                {
-                    return 1;
-                }
-                return 0;
-            }
-            else if (!part && assy && draw) // assy and drawing
-            {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
-                {
-                    return 1;
-                }
-                return 0;
-            }
-            else if (part && assy && draw) // for all types
-            {
-                if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART || swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY || swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
-                {
-                    return 1;
-                }
-                return 0;
-            }
-            else
-            {
-                return 0;
-            }
+            return 0;
+        }
+
+        public void MarkChecked()
+        {
+            //iSwApp.SendMsgToUser("Coming soon!")
+            Task task = new Task(MarkDrawingChecked);
+            task.Start();
+            progressBarForm.ShowDialog();
+            progressBarForm.UpdateProgressBar(1, "Fetching components");
+        }
+
+        private void MarkDrawingChecked()
+        {
+            connectapi.MarkDrawings(progressBarForm, false);
+        }
+
+        public void MarkApproved()
+        {
+            //iSwApp.SendMsgToUser("Coming soon!")
+            Task task = new Task(MarkDrawApproved);
+            task.Start();
+            progressBarForm.ShowDialog();
+            progressBarForm.UpdateProgressBar(1, "Fetching components");
+        }
+
+        private void MarkDrawApproved()
+        {
+            connectapi.MarkDrawings(progressBarForm, true);
+        }
+
+        public void NextPartNo()
+        {
+            connectapi.GetMyNextPartNo();
         }
 
         #region Sketch CallBacks
@@ -1133,17 +1261,18 @@ namespace SPMConnectAddin
                 {
                     case (int)swDocumentTypes_e.swDocPART:
                         {
-                            docHandler = new PartEventHandler(modDoc, this);
+                            docHandler = new PartEventHandler(modDoc, this, connectapi);
+
                             break;
                         }
                     case (int)swDocumentTypes_e.swDocASSEMBLY:
                         {
-                            docHandler = new AssemblyEventHandler(modDoc, this);
+                            docHandler = new AssemblyEventHandler(modDoc, this, connectapi);
                             break;
                         }
                     case (int)swDocumentTypes_e.swDocDRAWING:
                         {
-                            docHandler = new DrawingEventHandler(modDoc, this);
+                            docHandler = new DrawingEventHandler(modDoc, this, connectapi);
                             break;
                         }
                     default:

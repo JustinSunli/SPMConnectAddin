@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="SPM Connect Addin" Language="1033" Version="1.0.2.0" Manufacturer="SPM Automation" UpgradeCode="15E26CEE-ED2F-4B1C-8326-84D7581EF5F7">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes"/>
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_Common" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <Icon Id="MainIconId" SourceFile="Resources\spm.ico" />
+    <Property Id="ARPPRODUCTICON" Value="MainIconId" />
+    <WixVariable Id="WixUIBannerBmp" Value="Resources\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="Resources\dialog.bmp" />
+    <WixVariable Id="WixUILicenseRtf" Value="Resources\eula.rtf" />
+
+    <Feature Id="ProductFeature" Title="SPM Connect Addin" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="AddInComRegGroup" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="SPM Connect" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+      <!-- <7ed3c84e-0e29-4dfa-bc0d-c8b2192e94c1"> -->
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+      <Component Id="Reg" Guid="{2B5695FA-5E38-41A2-992E-2720CC2649FC}">
+        <RegistryValue Root="HKCU" Key="Software\SolidWorks\AddInsStartup\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}" Value="1" Type="integer" Action="write" />
+        <RegistryValue Root="HKLM" Key="Software\SolidWorks\Addins\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}" Value="0" Type="integer" Action="write" />
+        <RegistryValue Root="HKLM" Key="Software\SolidWorks\Addins\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}" Name="Description" Value="SPMConnect addin for macros" Type="string" Action="write" />
+        <RegistryValue Root="HKLM" Key="Software\SolidWorks\Addins\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}" Name="Title" Value="SPM Connect" Type="string" Action="write" />
+      </Component>
+      <Component Id="interops" Guid="{C52E6D7C-2D7E-4CD3-A9A3-9152E53C71D4}">
+        <File Id='SolidWorksTools.dllID' Name='SolidWorksTools.dll' Source ='$(var.SourceOutDir)\SolidWorksTools.dll'/>
+      </Component>
+      <Component Id="files" Guid="{2B81012E-E356-4E56-9138-A5EEF9E26060}">
+        <File Id='Bunifu_UI_v1.5.3.dllID' Name='Bunifu_UI_v1.5.3.dll' Source ='$(var.SourceOutDir)\Bunifu_UI_v1.5.3.dll'/>
+        <File Id='SPMConnectAddin.dllID' Name='SPMConnectAddin.dll' Source ='$(var.SourceOutDir)\SPMConnectAddin.dll'/>
+        <File Id="buttonicons.icon20.png" Name='icon20.png' Source="$(var.SourceOutDir)\icon20.png" />
+        <File Id="buttonicons.icon32.png" Name='icon32.png' Source="$(var.SourceOutDir)\icon32.png" />
+        <File Id="buttonicons.icon40.png" Name='icon40.png' Source="$(var.SourceOutDir)\icon40.png" />
+        <File Id="buttonicons.icon64.png" Name='icon64.png' Source="$(var.SourceOutDir)\icon64.png" />
+        <File Id="buttonicons.icon96.png" Name='icon96.png' Source="$(var.SourceOutDir)\icon96.png" />
+        <File Id="buttonicons.icon128.png" Name='icon128.png' Source="$(var.SourceOutDir)\icon128.png" />
+        <File Id="buttonicons.main20.png" Name='main20.png' Source="$(var.SourceOutDir)\main20.png" />
+        <File Id="buttonicons.main32.png" Name='main32.png' Source="$(var.SourceOutDir)\main32.png" />
+        <File Id="buttonicons.main40.png" Name='main40.png' Source="$(var.SourceOutDir)\main40.png" />
+        <File Id="buttonicons.main64.png" Name='main64.png' Source="$(var.SourceOutDir)\main64.png" />
+        <File Id="buttonicons.main96.png" Name='main96.png' Source="$(var.SourceOutDir)\main96.png" />
+        <File Id="buttonicons.main128.png" Name='main128.png' Source="$(var.SourceOutDir)\main128.png" />
+        <File Id="buttonicons.icons_16.png" Name='icons_16.png' Source="$(var.SourceOutDir)\icons_16.png" />
+        <File Id="buttonicons.icons_24.png" Name='icons_24.png' Source="$(var.SourceOutDir)\icons_24.png" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

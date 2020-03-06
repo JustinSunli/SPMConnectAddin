@@ -271,6 +271,62 @@ namespace SPMConnectAddin
             return management;
         }
 
+        public bool CheckingDrawingRights()
+        {
+            bool management = false;
+            using (SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM [SPM_Database].[dbo].[Users] WHERE UserName = @username AND [CheckDrawing] = '1'", cn))
+            {
+                try
+                {
+                    cn.Open();
+                    sqlCommand.Parameters.AddWithValue("@username", UserName());
+
+                    int userCount = (int)sqlCommand.ExecuteScalar();
+                    if (userCount == 1)
+                    {
+                        management = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "SPM Connect - Checking Drawing rights", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    cn.Close();
+                }
+            }
+            return management;
+        }
+
+        public bool ApproveDrawingRights()
+        {
+            bool management = false;
+            using (SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM [SPM_Database].[dbo].[Users] WHERE UserName = @username AND [ApproveDrawing] = '1'", cn))
+            {
+                try
+                {
+                    cn.Open();
+                    sqlCommand.Parameters.AddWithValue("@username", UserName());
+
+                    int userCount = (int)sqlCommand.ExecuteScalar();
+                    if (userCount == 1)
+                    {
+                        management = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "SPM Connect - Approve Drawing rights", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    cn.Close();
+                }
+            }
+            return management;
+        }
+
         #endregion UserRights
 
         public void Chekin(string applicationname)
@@ -414,6 +470,67 @@ namespace SPMConnectAddin
             }
 
             return notreadonly;
+        }
+
+        private bool CreateNewItem(string uniqueid)
+        {
+            bool success = false;
+            string user = Getuserfullname();
+            DateTime datecreated = DateTime.Now;
+            string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
+            try
+            {
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO [SPM_Database].[dbo].[Inventory] (ItemNumber, DesignedBy, DateCreated, LastSavedBy, LastEdited, JobPlanning) VALUES('" + uniqueid.ToString() + "','" + user + "','" + sqlFormattedDate + "','" + user + "','" + sqlFormattedDate + "','1')";
+                cmd.ExecuteNonQuery();
+                cn.Close();
+                success = true;
+                //MessageBox.Show("New entry created", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                MessageBox.Show(ex.Message, "SPM Connect - Create Entry On SQL Inventory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return success;
+        }
+
+        private bool UpdateItemToSQL(SPMItem item)
+        {
+            bool success = false;
+            DateTime dateedited = DateTime.Now;
+            string user = Getuserfullname();
+            string sqlFormattedDate = dateedited.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
+            try
+            {
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE [SPM_Database].[dbo].[Inventory] SET Description = '" + item.Description + "',FamilyCode = '" + item.Family + "',Manufacturer = '" + item.Manufacturer + "',ManufacturerItemNumber = '" + item.ManufacturerItemNo + "',Material = '" + item.Material + "',Spare = '" + item.Spare + "',FamilyType = '" + item.FamilyType + "',SurfaceProtection = '" + item.SurfaceProtection + "',HeatTreatment = '" + item.HeatTreatment + "',LastSavedBy = '" + user + "',Rupture = '" + item.Rupture + "',Notes = '" + item.Notes + "',LastEdited = '" + sqlFormattedDate + "' WHERE ItemNumber = '" + item.ItemNo + "' ";
+                cmd.ExecuteNonQuery();
+                cn.Close();
+                success = true;
+                //MessageBox.Show("Item sucessfully saved SPM Connect Server.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                MessageBox.Show(ex.Message, "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return success;
+            //perfromlockdown();
         }
 
         #region GetNewItemNumber or copy items
@@ -828,7 +945,7 @@ namespace SPMConnectAddin
             }
         }
 
-        public void Createdrawingpart(string filename, string _itemnumber)
+        public bool Createdrawingpart(string filename, string _itemnumber)
         {
             swApp.Visible = true;
             string template = swApp.GetUserPreferenceStringValue((int)swUserPreferenceStringValue_e.swDefaultTemplateDrawing);
@@ -871,19 +988,10 @@ namespace SPMConnectAddin
             boolstatus = swModelDocExt.SaveAs(filename, 0, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0, 0);
             swApp.QuitDoc(swModel.GetTitle());
 
-            if (boolstatus == true)
-            {
-                //MessageBox.Show("new part created");
-                //get_pathname();
-                //getfilename();
-            }
-            else
-            {
-                //MessageBox.Show("part not saved");
-            }
+            return boolstatus;
         }
 
-        public void Createdrawingassy(string filename, string _itemnumber)
+        public bool Createdrawingassy(string filename, string _itemnumber)
         {
             swApp.Visible = true;
             string template = swApp.GetUserPreferenceStringValue((int)swUserPreferenceStringValue_e.swDefaultTemplateDrawing);
@@ -926,16 +1034,7 @@ namespace SPMConnectAddin
             boolstatus = swModelDocExt.SaveAs(filename, 0, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0, 0);
             swApp.QuitDoc(swModel.GetTitle());
 
-            if (boolstatus == true)
-            {
-                //MessageBox.Show("new part created");
-                //get_pathname();
-                //getfilename();
-            }
-            else
-            {
-                //MessageBox.Show("part not saved");
-            }
+            return boolstatus;
         }
 
         public bool Importstepfile(string stepFileName, string savefilename)
@@ -1777,7 +1876,6 @@ namespace SPMConnectAddin
             }
             try
             {
-
                 //SelectionMgr swSelMgr = default(SelectionMgr);
                 //swSelMgr = (SelectionMgr)swModel.SelectionManager;
                 //Face2 swFace = default(Face2);
@@ -1942,7 +2040,6 @@ namespace SPMConnectAddin
                 swModel.SetPickMode();
                 swModel.ClearSelection2(true);
                 swModel.ViewZoomtofit2();
-
             }
             catch (Exception ex)
             {
@@ -2009,8 +2106,8 @@ namespace SPMConnectAddin
                 }
                 swDrawDoc.ActivateSheet(obj[0]);
                 swModel.ForceRebuild3(false);
-                swModel.Save3(1, 0, 0);
-                MessageBox.Show("Successfully reloaded sheet format.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //swModel.Save3(1, 0, 0);
+                // MessageBox.Show("Successfully reloaded sheet format.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -2112,6 +2209,18 @@ namespace SPMConnectAddin
             {
             }
         }
+
+        public void GetMyNextPartNo()
+        {
+            if (Validnumber(Getlastnumber()))
+            {
+                string newid = Spmnew_idincrement(Getlastnumber(), Getactiveblock().ToString());
+                MessageBox.Show("Your next ItemNumber to use is :- " + newid, "SPM Connect - New Item Number", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Clipboard.SetText(newid);
+            }
+        }
+
+        #region Export Features
 
         /// <summary>
         /// Exports the currently active part as a DXF
@@ -2258,15 +2367,12 @@ namespace SPMConnectAddin
                     {
                     }
                 }
-
             }
             else
             {
                 // multiple faces selected
                 MessageBox.Show("Please select a (one) 2D face before running this command. Or else select zero entities to save the model views as DXF.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
             }
-
         }
 
         /// <summary>
@@ -2527,7 +2633,6 @@ namespace SPMConnectAddin
                     }
                 }
             }
-
         }
 
         public void ExportModelAsParasolidToCNC()
@@ -2580,30 +2685,280 @@ namespace SPMConnectAddin
                     }
                 }
             }
-
         }
 
-        #region Private Helpers
+        #endregion Export Features
 
-        /// <summary>
-        /// Asks the user for a save filename and location
-        /// </summary>
-        /// <param name="filter">The filter for the save dialog box</param>
-        /// <param name="title">The title of the dialog box</param>
-        /// <returns></returns>
-        private string GetSaveLocation(string filter, string title)
+        #region Save To Server
+
+        public bool SaveToServer(bool userclick)
         {
-            // Create dialog
-            var dialog = new SaveFileDialog { Filter = filter, Title = title, AddExtension = true };
+            bool success = false;
+            ModelDoc2 swModel = swApp.ActiveDoc as ModelDoc2;
+            if (swModel == null)
+            {
+                if (userclick)
+                    MessageBox.Show("No active model found", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                // Tell user
+                if (userclick)
+                    MessageBox.Show("Active model is not a part or assembly", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 
-            // Get dialog result
-            if (dialog.ShowDialog() == DialogResult.OK)
-                return dialog.FileName;
+                return false;
+            }
+
+            SPMItem _item = GetActivePartCustomProps(swModel, userclick);
+            if (_item == null || _item.ItemNo.Length == 0)
+            {
+                if (userclick)
+                    MessageBox.Show("Part number not found. Please add unique SPM item id to custom properties.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
             else
-                return null;
+            {
+                if (Checkitempresentoninventory(_item.ItemNo) && swModel.GetPathName() != null)
+                {
+                    // update
+                    //grab customproperties
+                    if (ValidfileName(_item.ItemNo))// file exists to be updated
+                    {
+                        if (Getfilename() == _item.ItemNo)
+                        {
+                            if (UpdateItemToSQL(_item))
+                            {
+                                if (userclick)
+                                    MessageBox.Show("File successfully updated to SPM Connect.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                success = true;
+                                return success;
+                            }
+                            else
+                            {
+                                if (userclick)
+                                    MessageBox.Show("Error updating solidworks custom properties to SPM Connect.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            // filename and partnumber on custom prop doesnt match
+                            if (userclick)
+                                MessageBox.Show("Active solidworks file and custom properties part number does not match. Cannot update custom properties.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // there is no file with this partnumber
+                        if (userclick)
+                            MessageBox.Show("No file present with this partnumber saved on CAD Data.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!(userclick))
+                        return false;
+                    // create new item and update
+                    if (ValidfileName(_item.ItemNo))//that means file exists
+                    {
+                        // file with this part number already exists and cannot be saved
+                        if (userclick)
+                            MessageBox.Show("File with matching partno already exists on CAD Data. Cannot save to server.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return false;
+                    }
+                    else
+                    {
+                        // continue to create new and save
+                        // check for oem
+                        SPMItem oemexistsItem = CheckOEMExists(_item.ManufacturerItemNo);
+                        if (oemexistsItem.ItemNo != null && oemexistsItem.ItemNo.Length > 0)
+                        {
+                            if (userclick)
+                                MessageBox.Show("PartNo Already Exists in Database with the same OEM Item Number - " + _item.ManufacturerItemNo + "." + System.Environment.NewLine + " Use ItemNumber " + oemexistsItem.ItemNo + " - " + oemexistsItem.Description + " (" + oemexistsItem.Manufacturer + ") To Prevent Duplicates.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return false;
+                        }
+                        else
+                        {
+                            // Part is valid.. create it
+                            // save the file and create a entry on the database
+                            DialogResult result = MessageBox.Show("Are you sure want to create a new item?", "SPM Connect - Add New Item?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                            if (result == DialogResult.Yes)
+                            {
+                                string category = Getfamilycategory(_item.Family).ToString();
+                                if (ProcessModelCreation(_item.ItemNo, swModel, category == "Purchased" ? false : true))
+                                {
+                                    if (CreateNewItem(_item.ItemNo))
+                                    {
+                                        if (UpdateItemToSQL(_item))
+                                        {
+                                            if (userclick)
+                                                MessageBox.Show("File successfully saved to SPM Connect.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                            success = true;
+                                            return success;
+                                        }
+                                        else
+                                        {
+                                            if (userclick)
+                                                MessageBox.Show("Error updating solidworks custom properties to SPM Connect.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (userclick)
+                                            MessageBox.Show("Error creating new item to SPM Connect.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    // error creating or saving the model
+                                    if (userclick)
+                                        MessageBox.Show("Error saving or creating solidworks file.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
+        private bool ProcessModelCreation(string item, ModelDoc2 swModel, bool needsdrw)
+        {
+            string path = Makepath(item).ToString();
+            bool success = false;
+            bool successpart = false;
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                System.IO.Directory.CreateDirectory(path);
+                string filename = path + (item) + ".sldprt";
+                successpart = swModel.SaveAs(filename);
+                if (needsdrw)
+                {
+                    string draw = path + (item) + ".slddrw";
+                    success = Createdrawingpart(draw, item);
+                }
+                else
+                {
+                    success = true;
+                }
+            }
+            else if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                System.IO.Directory.CreateDirectory(path);
+                string filename = path + (item) + ".sldasm";
+                successpart = swModel.SaveAs(filename);
+                if (needsdrw)
+                {
+                    string draw = path + (item) + ".slddrw";
+                    success = Createdrawingassy(draw, item);
+                }
+                else
+                {
+                    success = true;
+                }
+            }
+            if (success && successpart)
+            {
+                success = true;
+            }
+            else
+            {
+                success = false;
+            }
+            return success;
+        }
 
+        public SPMItem GetActivePartCustomProps(ModelDoc2 swModel, bool userclick)
+        {
+            // Make sure we have a part or assembly
+            SPMItem item = new SPMItem();
+            try
+            {
+                CustomPropertyManager cusPropMgr;
+                ModelDocExtension swModelDocExt = default(ModelDocExtension);
+                swModelDocExt = swModel.Extension;
+                cusPropMgr = swModelDocExt.get_CustomPropertyManager("");
+
+                string partnumber = cusPropMgr.Get("PartNo").Replace("'", "''");
+
+                if (partnumber.Length != 6 && String.IsNullOrEmpty(partnumber) && !Char.IsLetter(partnumber[0]))
+                {
+                    if (userclick)
+                        MessageBox.Show("Active model does not have a valid SPM partnumber", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return null;
+                }
+                item.ItemNo = partnumber;
+                item.Description = cusPropMgr.Get("Description").Replace("'", "''");
+                item.Manufacturer = cusPropMgr.Get("OEM").Replace("'", "''");
+                item.ManufacturerItemNo = cusPropMgr.Get("OEM Item Number").Replace("'", "''");
+                item.Family = cusPropMgr.Get("cCategory").Replace("'", "''");
+                item.FamilyType = cusPropMgr.Get("Family Type").Replace("'", "''");
+                item.Spare = cusPropMgr.Get("Spare").Replace("'", "''").ToUpper();
+                item.SurfaceProtection = cusPropMgr.Get("Surface Protection").Replace("'", "''");
+                item.HeatTreatment = cusPropMgr.Get("Heat Treatment").Replace("'", "''");
+                item.Rupture = cusPropMgr.Get("Rupture").Replace("'", "''");
+                item.Notes = cusPropMgr.Get("Notes").Replace("'", "''");
+                cusPropMgr.Get2("cSubCategory", out string textexp, out string materialval);
+                item.Material = materialval.Replace("'", "''");
+                return item;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Get Custom Properties", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        public SPMItem CheckOEMExists(string oemno)
+        {
+            SPMItem item = new SPMItem();
+
+            try
+            {
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM [SPM_Database].[dbo].[Inventory] where (isnull(ManufacturerItemNumber, '') <> '' and ManufacturerItemNumber <> '-') and ManufacturerItemNumber = '" + oemno + "'";
+                cmd.ExecuteNonQuery();
+                DataTable dt = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        item.ItemNo = dr["ItemNumber"].ToString();
+                        item.Description = dr["Description"].ToString();
+                        item.Family = dr["FamilyCode"].ToString();
+                        item.Manufacturer = dr["Manufacturer"].ToString();
+                        item.ManufacturerItemNo = dr["ManufacturerItemNumber"].ToString();
+                        break;
+                    }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Check OEM Matches", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return item;
+        }
+
+        #endregion Save To Server
+
+        #region Print and Traverse Components
 
         public void TraverseFeatureFeatures(Feature swFeat, long nLevel)
         {
@@ -2636,21 +2991,16 @@ namespace SPMConnectAddin
                         {
                             Debug.Print(sPadStr + "      " + swSubSubSubFeat.Name + " [" + swSubSubSubFeat.GetTypeName() + "]");
                             swSubSubSubFeat = (Feature)swSubSubSubFeat.GetNextSubFeature();
-
                         }
 
                         swSubSubFeat = (Feature)swSubSubFeat.GetNextSubFeature();
-
                     }
 
                     swSubFeat = (Feature)swSubFeat.GetNextSubFeature();
-
                 }
 
                 swFeat = (Feature)swFeat.GetNextFeature();
-
             }
-
         }
 
         public void TraverseComponentFeatures(Component2 swComp, long nLevel)
@@ -2661,7 +3011,7 @@ namespace SPMConnectAddin
             TraverseFeatureFeatures(swFeat, nLevel);
         }
 
-        public void TraverseComponent(Component2 swComp, long nLevel)
+        private List<BOM> TraverseComponent(Component2 swComp, long nLevel)
         {
             object[] vChildComp;
             Component2 swChildComp;
@@ -2680,47 +3030,44 @@ namespace SPMConnectAddin
                 swChildComp = (Component2)vChildComp[i];
                 if (swChildComp.GetSuppression() != (int)swComponentSuppressionState_e.swComponentSuppressed && !(swChildComp.ExcludeFromBOM))
                 {
-
                     int bomPos = FindBomPosition(bomlist, swChildComp);
                     if (bomPos == -1)
                     {
                         BOM bOM = new BOM
                         {
-                            path = swChildComp.GetPathName(),
-                            s_id = bomlist.Count + 1,
-                            itemno = swChildComp.Name,
-                            description = swChildComp.Name2,
-                            qty = 1
+                            Path = swChildComp.GetPathName(),
+                            Id = bomlist.Count + 1,
+                            ItemNo = swChildComp.Name,
+                            Description = swChildComp.Name2,
+                            Qty = 1
                         };
                         bomlist.Add(bOM);
-
                     }
                     else
                     {
-                        BOM dog = bomlist.FirstOrDefault(d => d.path.ToLower() == swChildComp.GetPathName().ToLower());
-                        if (dog.path != null) { dog.qty++; }
-
+                        BOM dog = bomlist.FirstOrDefault(d => d.Path.ToLower() == swChildComp.GetPathName().ToLower());
+                        if (dog.Path != null) { dog.Qty++; }
                     }
 
                     Debug.Print(sPadStr + "+" + swChildComp.Name2 + " <" + swChildComp.ReferencedConfiguration + ">");
-
                 }
 
                 //TraverseComponentFeatures(swChildComp, nLevel);
                 //TraverseComponent(swChildComp, nLevel + 1);
             }
+
             foreach (BOM bom in bomlist)
             {
-                Debug.Print(bom.s_id + "+" + bom.itemno + " <" + bom.description + "> " + bom.qty);
+                Debug.Print(bom.Id + "+" + bom.ItemNo + " <" + bom.Description + "> " + bom.Qty);
             }
+            return bomlist;
         }
 
         private int FindBomPosition(List<BOM> bom, Component2 comp)
         {
-
             foreach (BOM item in bom)
             {
-                if ((item.path).ToLower() == comp.GetPathName().ToLower())
+                if ((item.Path).ToLower() == comp.GetPathName().ToLower())
                 {
                     return 0;
                 }
@@ -2735,9 +3082,9 @@ namespace SPMConnectAddin
             swFeat = (Feature)swModel.FirstFeature();
             TraverseFeatureFeatures(swFeat, nLevel);
         }
+
         public void ExportBOM()
         {
-
             ModelDoc2 swModel;
             ConfigurationManager swConfMgr;
             Configuration swConf;
@@ -2763,16 +3110,548 @@ namespace SPMConnectAddin
             myStopwatch.Stop();
             TimeSpan myTimespan = myStopwatch.Elapsed;
             Debug.Print("Time = " + myTimespan.TotalSeconds + " sec");
-
         }
 
+        public bool IsNumeric(string input)
+        {
+            int number;
+            return int.TryParse(input, out number);
+        }
+
+        public void PrintDrawings(Form1 form1)
+        {
+            int i = 1;
+            ModelDoc2 swModel;
+            ConfigurationManager swConfMgr;
+            Configuration swConf;
+            Component2 swRootComp;
+
+            swModel = (ModelDoc2)swApp.ActiveDoc;
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                return;
+            }
+
+            string job = "";
+            string subassy = "";
+            bool verfiedjob = false;
+            bool verifiedassy = false;
+
+            do
+            {
+                job = Interaction.InputBox("Enter SPM Job Number", "SPM Connect", "");
+                if (job == "")
+                {
+                    return;
+                }
+                if (IsNumeric(job) && job.Length == 5)
+                {
+                    verfiedjob = true;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid Job Number. Please try again", "SPM Connect - Job Number", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            } while (verfiedjob == false);
+
+            do
+            {
+                subassy = Interaction.InputBox("Enter SPM Sub-Assy Number", "SPM Connect", "");
+                if (subassy == "")
+                {
+                    return;
+                }
+
+                if (subassy.Length == 6 && !String.IsNullOrEmpty(subassy) && Char.IsLetter(subassy[0]))
+                {
+                    verifiedassy = true;
+                }
+                else
+                {
+                    MessageBox.Show("Not a valid part number. Please enter a valid six digit SPM item number (starting with 'A', 'B', 'C') as valid sub-assy number.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            } while (verifiedassy == false);
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                //grab job and subassy no
+                string drawing = Checkforspmdrwfile(Getfilename());
+                if (drawing != null)
+                {
+                    form1.UpdateProgressBar(50, "Currenty printing : " + drawing);
+                    Open_drw(drawing);
+                    ReloadSheetformat();
+                    swModel = (ModelDoc2)swApp.ActiveDoc;
+                    SendToPrinter(swModel, job, subassy);
+                    swApp.QuitDoc(swModel.GetTitle());
+                    form1.UpdateProgressBar(100, "Printing Complete. Please collect the print from the printer.");
+                }
+            }
+
+            //TraverseModelFeatures(swModel, 1);
+            List<BOM> bomlist = new List<BOM>();
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
+                swConf = (Configuration)swConfMgr.ActiveConfiguration;
+                swRootComp = (Component2)swConf.GetRootComponent();
+
+                bomlist = TraverseComponent(swRootComp, 1);
+
+                string assydrw = Checkforspmdrwfile(Getfilename());
+                if (assydrw != null)
+                {
+                    form1.UpdateProgressBar(i, "Currenty printing : " + assydrw);
+
+                    Open_drw(assydrw);
+                    ReloadSheetformat();
+                    swModel = (ModelDoc2)swApp.ActiveDoc;
+                    SendToPrinter(swModel, job, subassy);
+                    swApp.QuitDoc(swModel.GetTitle());
+                }
+                if (bomlist.Count > 0)
+                {
+                    List<string> drawings = new List<string>();
+
+                    foreach (BOM bom in bomlist)
+                    {
+                        string drawing = Checkforspmdrwfile(bom.ItemNo);
+                        if (drawing != null)
+                        {
+                            drawings.Add(drawing);
+                        }
+                    }
+
+                    int incrementby = 100 / drawings.Count;
+                    i += incrementby;
+                    foreach (string draw in drawings)
+                    {
+                        form1.UpdateProgressBar(i, "Currenty printing : " + draw);
+                        Open_drw(draw);
+                        ReloadSheetformat();
+                        swModel = (ModelDoc2)swApp.ActiveDoc;
+                        SendToPrinter(swModel, job, subassy);
+
+                        swApp.QuitDoc(swModel.GetTitle());
+                        i = i + incrementby;
+                    }
+                }
+
+                form1.UpdateProgressBar(100, "Printing Complete. Please collect the prints from the printer.");
+            }
+        }
+
+        public string Checkforspmdrwfile(string Item_No)
+        {
+            Item_No = Item_No.Substring(0, 6);
+            string drawing = null;
+            string ItemNumbero = Item_No + "-0";
+
+            if (!String.IsNullOrWhiteSpace(Item_No) && Item_No.Length == 6)
+            {
+                string first3char = Item_No.Substring(0, 3) + @"\";
+                //MessageBox.Show(first3char);
+
+                string spmcadpath = @"\\spm-adfs\CAD Data\AAACAD\";
+
+                string Drawpath = (spmcadpath + first3char + Item_No + ".SLDDRW");
+
+                string drawpathno = (spmcadpath + first3char + ItemNumbero + ".SLDDRW");
+
+                if (File.Exists(drawpathno) && File.Exists(Drawpath))
+                {
+                    return null;
+                }
+                else if (File.Exists(Drawpath))
+                {
+                    drawing = Drawpath;
+                }
+                else if (File.Exists(drawpathno))
+                {
+                    drawing = drawpathno;
+                }
+                else
+                {
+                }
+            }
+            else
+            {
+                return null;
+            }
+            return drawing;
+        }
+
+        private void SendToPrinter(ModelDoc2 swModel, string job, string subassy)
+        {
+            try
+            {
+                PageSetup ps;
+                ModelDocExtension swExt;
+                PrintSpecification printSpec;
+
+                swExt = swModel.Extension;
+                swExt.UsePageSetup = (int)swPageSetupInUse_e.swPageSetupInUse_Document;
+                ps = (PageSetup)swModel.PageSetup;
+                swModel.DeleteCustomInfo("Job");
+                swModel.DeleteCustomInfo("Subassy");
+                swModel.AddCustomInfo3("", "Job", (int)swCustomInfoType_e.swCustomInfoText, job);
+                swModel.AddCustomInfo3("", "Subassy", (int)swCustomInfoType_e.swCustomInfoText, subassy);
+                swModel.ForceRebuild3(true);
+
+                ps.Orientation = (int)swPageSetupOrientation_e.swPageSetupOrient_Landscape;
+                ps.ScaleToFit = true;
+                swModel.PrintSetup[0] = 17;
+
+                //Create a print specification
+                printSpec = (PrintSpecification)swExt.GetPrintSpecification();
+                printSpec.ConvertToHighQuality = true;
+                printSpec.PrinterQueue = "";
+                printSpec.PrintToFile = false;
+
+                swExt.PrintOut4("", "", printSpec);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Send to Printer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //print
+        }
+
+        #endregion Print and Traverse Components
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Asks the user for a save filename and location
+        /// </summary>
+        /// <param name="filter">The filter for the save dialog box</param>
+        /// <param name="title">The title of the dialog box</param>
+        /// <returns></returns>
+        private string GetSaveLocation(string filter, string title)
+        {
+            // Create dialog
+            var dialog = new SaveFileDialog { Filter = filter, Title = title, AddExtension = true };
+
+            // Get dialog result
+            if (dialog.ShowDialog() == DialogResult.OK)
+                return dialog.FileName;
+            else
+                return null;
+        }
 
         #endregion Private Helpers
+
+        #region Checking and Approving Drawings
+
+        private bool AddToCheckedDrawing(string itemid)
+        {
+            if (itemid == "")
+            {
+                itemid = Getfilename();
+            }
+            bool completed = false;
+            if (ValidfileName(itemid))
+            {
+                if (CheckMarkedDrawingExists(itemid))
+                {
+                    UpdateDrawingToSQLForChecked(itemid);
+                }
+                else
+                {
+                    AddDrawToChecked(itemid);
+                }
+            }
+            else
+            {
+                //MessageBox.Show($"A file with the part number " + itemid + " does not have Solidworks CAD Model or SPM item number assigned. Cannot add or remove from favorites. Please Try Again.", "SPM-Automation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return completed;
+        }
+
+        private bool AddToApprovedDrawing(string itemid)
+        {
+            if (itemid == "")
+            {
+                itemid = Getfilename();
+            }
+            bool completed = false;
+            if (ValidfileName(itemid))
+            {
+                if (CheckMarkedDrawingExists(itemid))
+                {
+                    UpdateDrawToApproved(itemid);
+                }
+                else
+                {
+                    //cannot be marked approved until checked
+                }
+            }
+            else
+            {
+                //MessageBox.Show($"A file with the part number " + itemid + " does not have Solidworks CAD Model or SPM item number assigned. Cannot add or remove from favorites. Please Try Again.", "SPM-Automation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return completed;
+        }
+
+        public bool CheckMarkedDrawingExists(string itemid)
+        {
+            bool itempresent = false;
+            if (itemid == "")
+            {
+                itemid = Getfilename();
+            }
+            if (ValidfileName(itemid))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM [SPM_Database].[dbo].[DrawingApprovals] WHERE [ItemNo]='" + itemid.ToString() + "' AND  ISNULL([CheckedOn], '') <> '' ", cn))
+                {
+                    try
+                    {
+                        cn.Open();
+
+                        int userCount = (int)sqlCommand.ExecuteScalar();
+                        if (userCount == 1)
+                        {
+                            //MessageBox.Show("item already exists");
+                            itempresent = true;
+                        }
+                        else
+                        {
+                            //MessageBox.Show(" move forward");
+                            itempresent = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "SPM Connect - Check Item Present On Drawing Checked", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        cn.Close();
+                    }
+                }
+            }
+            return itempresent;
+        }
+
+        private void MarkDrawingFile(ModelDoc2 swModel, bool approved)
+        {
+            try
+            {
+                string userid = Getuserfullname();
+                DateTime datecreated = DateTime.Now;
+                string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm tt");
+                if (approved)
+                {
+                    swModel.DeleteCustomInfo("QAApproval");
+                    swModel.DeleteCustomInfo("QAAppDate");
+                    swModel.AddCustomInfo3("", "QAApproval", (int)swCustomInfoType_e.swCustomInfoText, userid);
+                    swModel.AddCustomInfo3("", "QAAppDate", (int)swCustomInfoType_e.swCustomInfoText, sqlFormattedDate);
+                }
+                else
+                {
+                    swModel.DeleteCustomInfo("CheckedBy");
+                    swModel.DeleteCustomInfo("CheckedDate");
+                    swModel.DeleteCustomInfo("QAApproval");
+                    swModel.DeleteCustomInfo("QAAppDate");
+                    swModel.AddCustomInfo3("", "CheckedBy", (int)swCustomInfoType_e.swCustomInfoText, userid);
+                    swModel.AddCustomInfo3("", "CheckedDate", (int)swCustomInfoType_e.swCustomInfoText, sqlFormattedDate);
+                }
+
+                swModel.ForceRebuild3(true);
+                swModel.Save3(1, 0, 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Mark On Drawings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddDrawToChecked(string itemid)
+        {
+            string userid = Getuserfullname();
+            DateTime datecreated = DateTime.Now;
+            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            userid += ",";
+            try
+            {
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO [SPM_Database].[dbo].[DrawingApprovals] ([ItemNo],[CheckedOn],[CheckedBy]) VALUES('" + itemid + "','" + sqlFormattedDate + " ','" + userid + "')";
+                cmd.ExecuteNonQuery();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Mark Drawing Checked SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
+
+        private void UpdateDrawToApproved(string itemid)
+        {
+            string userid = Getuserfullname();
+            DateTime datecreated = DateTime.Now;
+            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            userid += ",";
+            try
+            {
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE [SPM_Database].[dbo].[DrawingApprovals] SET [ApprovedOn] = '" + sqlFormattedDate + "',[ApprovedBy] = '" + userid + "'  WHERE [ItemNo] = '" + itemid + "'";
+                cmd.ExecuteNonQuery();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Mark Drawing Approved/ SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
+
+        private void UpdateDrawingToSQLForChecked(string itemid)
+        {
+            string userid = Getuserfullname();
+            DateTime datecreated = DateTime.Now;
+            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
+            try
+            {
+                SqlCommand cmd = cn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE [SPM_Database].[dbo].[DrawingApprovals] SET [CheckedOn] = '" + sqlFormattedDate + "',[CheckedBy] = '" + userid + "',[ApprovedOn] = Null,[ApprovedBy] = ''  WHERE [ItemNo] = '" + itemid + "'";
+                cmd.ExecuteNonQuery();
+                cn.Close();
+                //MessageBox.Show("New entry created", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SPM Connect - Update Item on [DrawingApprovals]", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
+
+        public void MarkDrawings(Form1 form1, bool approved)
+        {
+            int i = 1;
+            ModelDoc2 swModel;
+            ConfigurationManager swConfMgr;
+            Configuration swConf;
+            Component2 swRootComp;
+
+            swModel = (ModelDoc2)swApp.ActiveDoc;
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                return;
+            }
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                //grab job and subassy no
+                string drawing = Checkforspmdrwfile(Getfilename());
+                if (drawing != null)
+                {
+                    form1.UpdateProgressBar(50, "Currenty marking : " + drawing);
+                    Open_drw(drawing);
+                    ReloadSheetformat();
+                    swModel = (ModelDoc2)swApp.ActiveDoc;
+                    MarkDrawingFile(swModel, approved);
+                    if (approved)
+                    {
+                        AddToApprovedDrawing("");
+                    }
+                    else
+                    {
+                        AddToCheckedDrawing("");
+                    }
+                    swApp.QuitDoc(swModel.GetTitle());
+                    form1.UpdateProgressBar(100, "Marking Complete." + (approved ? "Print can be sent for release and built." : " Print can be sent for approval now."));
+                }
+            }
+
+            //TraverseModelFeatures(swModel, 1);
+            List<BOM> bomlist = new List<BOM>();
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
+                swConf = (Configuration)swConfMgr.ActiveConfiguration;
+                swRootComp = (Component2)swConf.GetRootComponent();
+
+                bomlist = TraverseComponent(swRootComp, 1);
+
+                string assydrw = Checkforspmdrwfile(Getfilename());
+                if (assydrw != null)
+                {
+                    form1.UpdateProgressBar(i, "Currenty marking : " + assydrw);
+
+                    Open_drw(assydrw);
+                    ReloadSheetformat();
+                    swModel = (ModelDoc2)swApp.ActiveDoc;
+                    MarkDrawingFile(swModel, approved);
+                    if (approved)
+                    {
+                        AddToApprovedDrawing("");
+                    }
+                    else
+                    {
+                        AddToCheckedDrawing("");
+                    }
+                    swApp.QuitDoc(swModel.GetTitle());
+                }
+                if (bomlist.Count > 0)
+                {
+                    List<string> drawings = new List<string>();
+
+                    foreach (BOM bom in bomlist)
+                    {
+                        string drawing = Checkforspmdrwfile(bom.ItemNo);
+                        if (drawing != null)
+                        {
+                            drawings.Add(drawing);
+                        }
+                    }
+
+                    int incrementby = 100 / drawings.Count;
+                    i += incrementby;
+                    foreach (string draw in drawings)
+                    {
+                        form1.UpdateProgressBar(i, "Currenty marking : " + draw);
+                        Open_drw(draw);
+                        ReloadSheetformat();
+                        swModel = (ModelDoc2)swApp.ActiveDoc;
+                        MarkDrawingFile(swModel, approved);
+                        if (approved)
+                        {
+                            AddToApprovedDrawing("");
+                        }
+                        else
+                        {
+                            AddToCheckedDrawing("");
+                        }
+                        swApp.QuitDoc(swModel.GetTitle());
+                        i = i + incrementby;
+                    }
+                }
+
+                form1.UpdateProgressBar(100, "Marking Complete." + (approved ? "Prints can be sent for release and built." : " Prints can be sent for approval now."));
+            }
+        }
+
+        #endregion Checking and Approving Drawings
     }
-}
-class BOM
-{
-    public int s_id;
-    public int qty;
-    public string itemno, description, path;
 }
