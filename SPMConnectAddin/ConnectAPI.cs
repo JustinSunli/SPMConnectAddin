@@ -3104,6 +3104,7 @@ namespace SPMConnectAddin
 
             if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
             {
+                int errors = swApp.ActiveDoc.ResolveAllLightWeightComponents(true);
                 TraverseComponent(swRootComp, 1);
             }
 
@@ -3125,7 +3126,7 @@ namespace SPMConnectAddin
             ConfigurationManager swConfMgr;
             Configuration swConf;
             Component2 swRootComp;
-
+            AssemblyDoc swAssy;
             swModel = (ModelDoc2)swApp.ActiveDoc;
             if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
             {
@@ -3190,11 +3191,14 @@ namespace SPMConnectAddin
 
             //TraverseModelFeatures(swModel, 1);
             List<BOM> bomlist = new List<BOM>();
+
             if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
             {
                 swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
                 swConf = (Configuration)swConfMgr.ActiveConfiguration;
                 swRootComp = (Component2)swConf.GetRootComponent();
+                swAssy = (AssemblyDoc)swModel;
+                int errors = swAssy.ResolveAllLightWeightComponents(true);
 
                 bomlist = TraverseComponent(swRootComp, 1);
 
@@ -3554,6 +3558,7 @@ namespace SPMConnectAddin
             ConfigurationManager swConfMgr;
             Configuration swConf;
             Component2 swRootComp;
+            AssemblyDoc swAssy;
 
             swModel = (ModelDoc2)swApp.ActiveDoc;
             if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
@@ -3591,7 +3596,8 @@ namespace SPMConnectAddin
                 swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
                 swConf = (Configuration)swConfMgr.ActiveConfiguration;
                 swRootComp = (Component2)swConf.GetRootComponent();
-
+                swAssy = (AssemblyDoc)swModel;
+                int errors = swAssy.ResolveAllLightWeightComponents(true);
                 bomlist = TraverseComponent(swRootComp, 1);
 
                 string assydrw = Checkforspmdrwfile(Getfilename());
