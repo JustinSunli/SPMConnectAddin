@@ -6,83 +6,83 @@
     <Fragment>
         <ComponentGroup Id="AddInComRegGroup">
             <Component Id="cmp17D10BB81B50414BC8771CD756BF813A" Directory="INSTALLFOLDER" Guid="*">
-                <Class Id="{61FBB636-B03F-3383-A93D-689ADA363DA4}" Context="InprocServer32" Description="SPMConnectAddin.Form1" ThreadingModel="both" ForeignServer="mscoree.dll">
-                    <ProgId Id="SPMConnectAddin.Form1" Description="SPMConnectAddin.Form1" />
+                <Class Id="{361463F8-AEB6-3A1F-A110-4D05697B71E3}" Context="InprocServer32" Description="SPMConnectAddin.Dialog" ThreadingModel="both" ForeignServer="mscoree.dll">
+                    <ProgId Id="SPMConnectAddin.Dialog" Description="SPMConnectAddin.Dialog" />
                 </Class>
-                <Class Id="{64D001E9-9413-3661-A2F5-DD7168FB8B09}" Context="InprocServer32" Description="SPMConnectAddin.SPMItem" ThreadingModel="both" ForeignServer="mscoree.dll">
-                    <ProgId Id="SPMConnectAddin.SPMItem" Description="SPMConnectAddin.SPMItem" />
+                <Class Id="{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}" Context="InprocServer32" Description="SPMConnectAddin.OpenItem" ThreadingModel="both" ForeignServer="mscoree.dll">
+                    <ProgId Id="SPMConnectAddin.OpenItem" Description="SPMConnectAddin.OpenItem" />
                 </Class>
                 <Class Id="{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}" Context="InprocServer32" Description="SPMConnectAddin.SwAddin" ThreadingModel="both" ForeignServer="mscoree.dll">
                     <ProgId Id="SPMConnectAddin.SwAddin" Description="SPMConnectAddin.SwAddin" />
                 </Class>
-                <Class Id="{8323A337-BEE4-31FD-851F-2455ADF0B044}" Context="InprocServer32" Description="SPMConnectAddin.Dialog" ThreadingModel="both" ForeignServer="mscoree.dll">
-                    <ProgId Id="SPMConnectAddin.Dialog" Description="SPMConnectAddin.Dialog" />
-                </Class>
-                <Class Id="{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}" Context="InprocServer32" Description="SPMConnectAddin.BOM" ThreadingModel="both" ForeignServer="mscoree.dll">
+                <Class Id="{7BEFC17D-4C29-3941-B319-520BD4EAA844}" Context="InprocServer32" Description="SPMConnectAddin.BOM" ThreadingModel="both" ForeignServer="mscoree.dll">
                     <ProgId Id="SPMConnectAddin.BOM" Description="SPMConnectAddin.BOM" />
                 </Class>
-                <Class Id="{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}" Context="InprocServer32" Description="SPMConnectAddin.OpenItem" ThreadingModel="both" ForeignServer="mscoree.dll">
-                    <ProgId Id="SPMConnectAddin.OpenItem" Description="SPMConnectAddin.OpenItem" />
+                <Class Id="{8CC56227-4200-3C0D-9AFA-2E89557CD68D}" Context="InprocServer32" Description="SPMConnectAddin.Form1" ThreadingModel="both" ForeignServer="mscoree.dll">
+                    <ProgId Id="SPMConnectAddin.Form1" Description="SPMConnectAddin.Form1" />
+                </Class>
+                <Class Id="{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}" Context="InprocServer32" Description="SPMConnectAddin.SPMItem" ThreadingModel="both" ForeignServer="mscoree.dll">
+                    <ProgId Id="SPMConnectAddin.SPMItem" Description="SPMConnectAddin.SPMItem" />
                 </Class>
                 <File Id="fil7AC49204B842F14D840B4BD40EAB2DDC" KeyPath="yes" Source="$(var.SourceOutDir)\SPMConnectAddin.dll" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.Form1" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32" Name="Class" Value="SPMConnectAddin.Form1" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{61FBB636-B03F-3383-A93D-689ADA363DA4}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.SPMItem" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32" Name="Class" Value="SPMConnectAddin.SPMItem" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{64D001E9-9413-3661-A2F5-DD7168FB8B09}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.Dialog" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32" Name="Class" Value="SPMConnectAddin.Dialog" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{361463F8-AEB6-3A1F-A110-4D05697B71E3}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.OpenItem" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32" Name="Class" Value="SPMConnectAddin.OpenItem" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{4D6FDBA7-4EF3-33DE-A538-662659D3CC2C}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.SwAddin" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.SwAddin" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32" Name="Class" Value="SPMConnectAddin.SwAddin" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
                 <RegistryValue Root="HKCR" Key="CLSID\{666CAF40-D1A8-42C5-AD90-ADE271FFC4BC}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.Dialog" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32" Name="Class" Value="SPMConnectAddin.Dialog" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{8323A337-BEE4-31FD-851F-2455ADF0B044}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.BOM" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32" Name="Class" Value="SPMConnectAddin.BOM" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{87B6E16A-EFD4-3133-83D3-EEF0BBF74DAE}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32\1.0.0.0" Name="Class" Value="SPMConnectAddin.OpenItem" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32" Name="Class" Value="SPMConnectAddin.OpenItem" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="CLSID\{B33CE5DD-36FF-301D-B9E2-5FF954D9E251}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.0.0" Name="Class" Value="SolidWorks.Interop.swconst.swComponentSuppressionState_e" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.0.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.0.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.BOM" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32" Name="Class" Value="SPMConnectAddin.BOM" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{7BEFC17D-4C29-3941-B319-520BD4EAA844}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.Form1" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32" Name="Class" Value="SPMConnectAddin.Form1" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{8CC56227-4200-3C0D-9AFA-2E89557CD68D}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32\1.0.1.0" Name="Class" Value="SPMConnectAddin.SPMItem" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32" Name="Class" Value="SPMConnectAddin.SPMItem" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{C98A4B06-04AB-3CB1-9DD4-1CD1C2D3AE7C}\InprocServer32" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.1.0" Name="Class" Value="SolidWorks.Interop.swconst.swComponentSuppressionState_e" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.1.0" Name="Assembly" Value="SPMConnectAddin, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.1.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="Record\{C7044F4E-27E1-4095-B6A5-35682477B8C8}\1.0.1.0" Name="CodeBase" Value="file:///[#fil7AC49204B842F14D840B4BD40EAB2DDC]" Type="string" Action="write" />
                 <RegistryValue Root="HKCU" Key="Software\SolidWorks\AddInsStartup\{666caf40-d1a8-42c5-ad90-ade271ffc4bc}" Value="1" Type="integer" Action="write" />
                 <RegistryValue Root="HKLM" Key="Software\SolidWorks\Addins\{666caf40-d1a8-42c5-ad90-ade271ffc4bc}" Value="0" Type="integer" Action="write" />
                 <RegistryValue Root="HKLM" Key="Software\SolidWorks\Addins\{666caf40-d1a8-42c5-ad90-ade271ffc4bc}" Name="Description" Value="SPMConnect addin for macros" Type="string" Action="write" />

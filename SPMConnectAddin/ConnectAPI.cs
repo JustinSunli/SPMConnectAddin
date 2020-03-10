@@ -1964,7 +1964,7 @@ namespace SPMConnectAddin
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SPM Connect - Random Color", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error occured while applying random color. Please select valid features from feature manager tree or no selection at all to apply color to entire model." + ex.Message, "SPM Connect - Random Color", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -2713,8 +2713,8 @@ namespace SPMConnectAddin
             SPMItem _item = GetActivePartCustomProps(swModel, userclick);
             if (_item == null || _item.ItemNo.Length == 0)
             {
-                if (userclick)
-                    MessageBox.Show("Part number not found. Please add unique SPM item id to custom properties.", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                //if (userclick)
+                //    MessageBox.Show("Part number not found. Please add unique SPM item id to custom properties.", "SPM Connect - Save To Server", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
             else
@@ -2894,7 +2894,7 @@ namespace SPMConnectAddin
                 if (partnumber.Length != 6 && String.IsNullOrEmpty(partnumber) && !Char.IsLetter(partnumber[0]))
                 {
                     if (userclick)
-                        MessageBox.Show("Active model does not have a valid SPM partnumber", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show("Active model does not have a valid SPM partnumber. Please add unique SPM item id to custom properties.", "SPM Connect - Get Custom Properties", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return null;
                 }
                 item.ItemNo = partnumber;
@@ -2914,7 +2914,8 @@ namespace SPMConnectAddin
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SPM Connect - Get Custom Properties", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (userclick)
+                    MessageBox.Show("Not able to read custom properties." + ex.Message, "SPM Connect - Get Custom Properties", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
         }

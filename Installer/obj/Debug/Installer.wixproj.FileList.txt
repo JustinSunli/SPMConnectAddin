@@ -1,2 +1,0 @@
-obj\Debug\pthD42CD12FDC4C31D36BE034B8350FC909\AddInReg.wixobj
-obj\Debug\Product.wixobj

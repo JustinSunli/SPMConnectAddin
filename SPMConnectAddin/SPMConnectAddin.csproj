@@ -207,6 +207,9 @@
     <Content Include="icons_24.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="\\spm-adfs\SDBASE\SPM Connect Addin\update.xml">
+      <Link>update.xml</Link>
+    </Content>
     <None Include="Resources\SolidWorks_64.png" />
   </ItemGroup>
   <ItemGroup />

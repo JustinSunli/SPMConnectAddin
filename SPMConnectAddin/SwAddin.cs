@@ -17,7 +17,7 @@ namespace SPMConnectAddin
 {
     /// <summary>
     /// Summary description for SPMConnectAddin.
-    /// </summary>[Guid("AABF7774-72C8-417B-AFAA-030FA9EF02A4")]
+    /// </summary>[Guid("666CAF40-D1A8-42C5-AD90-ADE271FFC4BC")]
     [Guid("666CAF40-D1A8-42C5-AD90-ADE271FFC4BC"), ComVisible(true)]
     [SwAddin(
          Description = "SPMConnect addin for macros",
