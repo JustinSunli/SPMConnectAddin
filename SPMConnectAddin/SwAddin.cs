@@ -569,7 +569,7 @@ namespace SPMConnectAddin
                 return;
             }
 
-            if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART || swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocPART && swModel.GetType() != (int)swDocumentTypes_e.swDocASSEMBLY)
             {
                 // Tell user
                 MessageBox.Show("Active model is not a part or assembly to copy", "SPM Connect", MessageBoxButtons.OK, MessageBoxIcon.Stop);
