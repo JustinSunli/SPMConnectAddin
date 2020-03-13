@@ -27,7 +27,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("1.0.2.0")]
+[assembly: AssemblyVersion("1.0.3.0")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the
@@ -58,6 +58,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
 [assembly: Guid("82B03035-7914-4F4C-A3B8-D6C8C8EEE7F8")]
-[assembly: AssemblyFileVersion("1.0.2.0")]
+[assembly: AssemblyFileVersion("1.0.3.0")]
 [assembly: ComVisible(true)]
 

@@ -332,7 +332,7 @@ namespace SPMConnectAddin
         public void Chekin(string applicationname)
         {
             DateTime datecreated = DateTime.Now;
-            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string computername = System.Environment.MachineName;
 
             if (cn.State == ConnectionState.Closed)
@@ -3478,7 +3478,7 @@ namespace SPMConnectAddin
         {
             string userid = Getuserfullname();
             DateTime datecreated = DateTime.Now;
-            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm:ss.fff");
             userid += ",";
             try
             {
@@ -3504,7 +3504,7 @@ namespace SPMConnectAddin
         {
             string userid = Getuserfullname();
             DateTime datecreated = DateTime.Now;
-            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm:ss.fff");
             userid += ",";
             try
             {
@@ -3530,7 +3530,7 @@ namespace SPMConnectAddin
         {
             string userid = Getuserfullname();
             DateTime datecreated = DateTime.Now;
-            string sqlFormattedDate = datecreated.ToString("dd-MM-yyyy HH:mm tt");
+            string sqlFormattedDate = datecreated.ToString("yyyy-MM-dd HH:mm:ss.fff");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
             try
